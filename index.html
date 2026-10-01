@@ -2,6 +2,19 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>My Little Money Journal</title>
+<link rel="manifest" href="./manifest.json">
+
+<meta name="theme-color" content="#7a2e4a">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<meta name="apple-mobile-web-app-title" content="Money Journal">
+
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#faf5ee;--card:#fffdf9;--ink:#3d2a2f;--mute:#8a7670;--rose:#c98d97;--blush:#f5e3e3;--mauve:#a9818f;--berry:#7a2e4a;--beige:#efe4d6;--line:#ead9d0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -163,4 +176,24 @@ function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=
 $('#fab').onclick=()=>$('#menu').classList.toggle('open');
 $('#menu').innerHTML=[['ex','+ Expense'],['wl','+ Wishlist item'],['pu','+ Purchase']].map(a=>`<button class="btn soft" onclick="$('#menu').classList.remove('open');openForm('${a[0]}')">${a[1]}</button>`).join('');
 render();
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(registration => {
+        console.log(
+          "Money Journal PWA registered:",
+          registration.scope
+        );
+      })
+      .catch(error => {
+        console.error(
+          "Money Journal PWA registration failed:",
+          error
+        );
+      });
+  });
+}
 </script></body></html>
