@@ -32,7 +32,7 @@ nav button{flex:1;background:none;border:0;color:var(--mute);font:500 11px "DM S
 nav button span{display:block;font-size:20px}
 nav button.on{color:var(--berry);background:var(--blush)}
 @media(min-width:900px){nav{top:0;right:auto;bottom:0;width:130px;flex-direction:column;justify-content:flex-start;gap:6px;padding:28px 10px;border-top:0;border-right:1px solid var(--line)}#app{margin-left:calc(50% - 250px);margin-right:auto;padding-bottom:60px}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 1px 6px rgba(122,46,74,.05)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 1px 6px rgba(122,46,74,.05)}
 .row{display:flex;align-items:center;gap:12px}.sp{justify-content:space-between}
 .grid{display:grid;gap:12px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr}
 @media(min-width:600px){.g3{grid-template-columns:repeat(3,1fr)}}
@@ -45,9 +45,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--rose)}
 label{display:block;font-size:13px;color:var(--mute);margin-top:12px}
 .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:10px}
 .search{margin:0 0 16px;border-radius:99px;padding-left:18px}
-.item{display:flex;gap:12px;align-items:center;padding:12px;margin-bottom:10px;cursor:pointer;transition:.2s}
+.item{display:flex;gap:10px;align-items:center;padding:9px;margin-bottom:8px;cursor:pointer;transition:.2s}
 .item:hover{border-color:var(--rose)}
-.ic{width:44px;height:44px;border-radius:15px;background:var(--blush);display:grid;place-items:center;font-size:21px;flex:none;overflow:hidden}
+.ic{width:40px;height:40px;border-radius:13px;background:var(--blush);display:grid;place-items:center;font-size:21px;flex:none;overflow:hidden}
 .ic img{width:100%;height:100%;object-fit:cover}
 .amt{font-weight:600;color:var(--berry);white-space:nowrap}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px}
@@ -58,11 +58,11 @@ label{display:block;font-size:13px;color:var(--mute);margin-top:12px}
 .bar{height:7px;background:var(--beige);border-radius:9px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--rose);border-radius:9px}
 .ph{aspect-ratio:4/3;border-radius:18px;background:linear-gradient(160deg,var(--blush),var(--beige));display:grid;place-items:center;overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover}
-.wl{overflow:hidden;padding:10px}.wl .body{padding:10px 4px 2px}
+.wl{overflow:hidden;padding:8px;border-radius:18px}.wl .body{padding:8px 3px 1px}
 .tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;background:var(--blush);color:var(--berry);margin:2px 4px 2px 0}
 .p1{border-left:5px solid var(--berry)}.p2{border-left:5px solid var(--rose)}.p3{border-left:5px solid var(--line)}
 .gal{columns:2;gap:12px}@media(min-width:600px){.gal{columns:3}}
-.gal .card{break-inside:avoid;margin-bottom:12px;padding:8px;cursor:pointer}
+.gal .card{break-inside:avoid;margin-bottom:10px;padding:6px;cursor:pointer}
 .empty{text-align:center;padding:36px 16px;color:var(--mute)}.empty svg{width:70px;height:70px;color:var(--rose);opacity:.7}
 .fab{position:fixed;z-index:30;right:18px;bottom:calc(84px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;border:0;background:var(--berry);color:#fff;font-size:30px;cursor:pointer;box-shadow:0 4px 14px rgba(122,46,74,.3)}
 @media(min-width:900px){.fab{bottom:28px}}
@@ -86,14 +86,14 @@ label{display:block;font-size:13px;color:var(--mute);margin-top:12px}
 <button class="fab" id="fab" aria-label="Quick add">+</button>
 <script>
 const K='moneyJournalV1',$=s=>document.querySelector(s);
-const def=()=>({name:'Ikram',budget:0,ex:[],wl:[],pu:[],xc:['🍽 Food','🛍 Shopping','💄 Beauty','👗 Clothes','📚 Education','🚕 Transportation','📱 Technology','🏠 Home','🎁 Gifts','☕ Drinks','💻 Work','📦 Other'],wc:['💄 Beauty','👗 Fashion','📱 Technology','📚 Books','🏠 Home','🎨 Creative','👜 Accessories','🎁 Gifts','🌸 Personal','📦 Other']});
-let S=def();try{const d=JSON.parse(localStorage.getItem(K));if(d)S=Object.assign(def(),d)}catch(e){}
+const def=()=>({name:'Ikram',budget:0,income:[],ex:[],wl:[],pu:[],xc:['🍽 Food','🛍 Shopping','💄 Beauty','👗 Clothes','📚 Education','🚕 Transportation','📱 Technology','🏠 Home','🎁 Gifts','☕ Drinks','💻 Work','📦 Other'],wc:['💄 Beauty','👗 Fashion','📱 Technology','📚 Books','🏠 Home','🎨 Creative','👜 Accessories','🎁 Gifts','🌸 Personal','📦 Other']});
+let S=def();try{const d=JSON.parse(localStorage.getItem(K));if(d)S=Object.assign(def(),d);if(!Array.isArray(S.income))S.income=[]}catch(e){}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('Storage is full — please export a backup and remove some photos')}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
 const fm=n=>Math.round(+n||0).toLocaleString('en-US')+' DA';
-const sum=a=>a.reduce((s,x)=>s+(+x.a||0),0);
+const sum=a=>a.reduce((s,x)=>s+(+x.a||0),0);const totalIncome=()=>sum(S.income||[]);const totalSpent=()=>sum(S.ex||[]);const balance=()=>totalIncome()-totalSpent();
 const fd=d=>d?new Date(d+'T12:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
 const mname=m=>new Date(m+'-15T12:00').toLocaleDateString('en-US',{month:'long',year:'numeric'});
 const ico=c=>(c||'📦').split(' ')[0];
@@ -117,11 +117,12 @@ const pages={
 home(){const ex=S.ex.filter(e=>inM(e.d,ym)),tot=sum(ex),pu=S.pu.filter(p=>inM(p.d,ym)),wa=S.wl.filter(w=>inM(w.da,ym));
 return`<div class="top"><div><h1>Hello, ${esc(S.name)} 🌸</h1><div class="sub">Let's see where your money is going.</div></div></div>
 <div class="row sp" style="margin-bottom:12px"><button class="btn sm soft" onclick="shift(-1)">‹</button><h3>${mname(ym)}</h3><button class="btn sm soft" onclick="shift(1)">›</button></div>
-<div class="grid g3" style="margin-bottom:12px"><div class="card stat"><div class="sub">Total spent</div><div class="big">${fm(tot)}</div></div><div class="card stat"><div class="sub">Expenses</div><div class="big">${ex.length}</div></div><div class="card stat"><div class="sub">Wishlist</div><div class="big">${fm(sum(S.wl))}</div></div><div class="card stat"><div class="sub">Purchased</div><div class="big">${pu.length}</div></div><div class="card stat"><div class="sub">Added to wishlist</div><div class="big">${wa.length}</div></div></div>
-<div class="card" style="margin-bottom:12px">${S.budget>0?`<div class="row sp"><div><div class="sub">Monthly plan · ${fm(S.budget)}</div><b>${fm(tot)} spent this month</b></div><div class="amt">${fm(Math.max(S.budget-tot,0))} remaining</div></div><div class="bar" style="height:10px"><i style="width:${Math.min(tot/S.budget*100,100)}%"></i></div>`:`<div class="row sp"><span class="sub">Set a gentle monthly budget if you'd like one.</span><button class="btn sm soft" onclick="go('settings')">Set budget</button></div>`}</div>
+<div class="card stat" style="margin-bottom:10px"><div class="row sp"><div><div class="sub">Current balance</div><div class="big">${fm(balance())}</div><div class="sub">${fm(totalIncome())} in · ${fm(totalSpent())} out</div></div><button class="btn sm" onclick="openIncome()">+ Add money</button></div></div>
+<div class="grid g3" style="margin-bottom:12px"><div class="card stat"><div class="sub">Spent this month</div><div class="big">${fm(tot)}</div></div><div class="card stat"><div class="sub">Expenses</div><div class="big">${ex.length}</div></div><div class="card stat"><div class="sub">Wishlist</div><div class="big">${fm(sum(S.wl))}</div></div><div class="card stat"><div class="sub">Purchased</div><div class="big">${pu.length}</div></div><div class="card stat"><div class="sub">Added to wishlist</div><div class="big">${wa.length}</div></div></div>
 <div class="card" style="margin-bottom:16px"><h3 style="margin-bottom:10px">Your biggest spending categories</h3>${chart(ex)}</div>
 <div class="row sp" style="margin-bottom:8px"><h3>Recent expenses</h3><button class="btn sm ghost" onclick="go('ex')">See all</button></div>${ex.length?ex.sort((a,b)=>b.d.localeCompare(a.d)).slice(0,4).map(exItem).join(''):empty('No expenses yet.<br>Your spending journey starts here.')}
 <div class="row sp" style="margin:18px 0 8px"><h3>Wishlist highlights</h3><button class="btn sm ghost" onclick="go('wl')">See all</button></div>${S.wl.length?`<div class="grid g2">${[...S.wl].sort((a,b)=>a.p-b.p).slice(0,2).map(wlCard).join('')}</div>`:empty('Your wishlist is waiting for its first little dream 🌸')}`},
+income(){const l=[...(S.income||[])].sort((a,b)=>b.d.localeCompare(a.d));return `<div class="top"><div><h2>Money In</h2><div class="sub">Money that comes into your balance</div></div><button class="btn" onclick="openIncome()">+ Add money</button></div><div class="card stat" style="margin-bottom:12px"><div class="sub">Total money in</div><div class="big">${fm(totalIncome())}</div></div>${l.length?l.map(i=>`<div class="card item"><div class="ic">💰</div><div style="flex:1;min-width:0"><b>${esc(i.t||'Money received')}</b><div class="sub">${fd(i.d)}${i.n?' · '+esc(i.n):''}</div></div><div class="amt">+${fm(i.a)}</div><button class="btn sm ghost" onclick="delIncome('${i.id}')">Delete</button></div>`).join(''):empty('No money received yet.<br>Add your first amount 🌸')}`},
 ex(){let l=[...S.ex];const t=today().slice(0,7),lm=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return d.toISOString().slice(0,7)})();
 if(F.p=='month')l=l.filter(e=>inM(e.d,t));else if(F.p=='last')l=l.filter(e=>inM(e.d,lm));else if(F.p=='custom')l=l.filter(e=>(!F.f||e.d>=F.f)&&(!F.t||e.d<=F.t));
 if(F.c)l=l.filter(e=>e.c==F.c);l.sort((a,b)=>b.d.localeCompare(a.d));
@@ -138,13 +139,13 @@ pu(){return`<div class="top"><div><h2>Purchases</h2><div class="sub">Your little
 settings(){return`<h2 style="margin-bottom:14px">Settings</h2>
 <div class="card"><label style="margin-top:0">Your name</label><input value="${esc(S.name)}" onchange="S.name=this.value||'Ikram';save()"><label>Monthly budget (DA, optional)</label><input type="number" inputmode="numeric" value="${S.budget||''}" onchange="S.budget=+this.value||0;save()"></div>
 <div class="card" style="margin-top:12px"><h3>Custom categories</h3><div class="sub" style="margin:6px 0">Start with an emoji, e.g. “🧴 Skincare”</div><div class="row"><input id="nc" placeholder="🌿 New category"></div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="addCat('xc')">Add to expenses</button><button class="btn sm soft" onclick="addCat('wc')">Add to wishlist</button></div></div>
-<div class="card" style="margin-top:12px"><h3 style="margin-bottom:8px">Your data</h3><div class="sub" style="margin-bottom:10px">Everything stays in this browser. Back it up now and then.</div><div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn sm" onclick="exp('json')">Export my data</button><button class="btn sm soft" onclick="$('#imp').click()">Import my data</button><button class="btn sm soft" onclick="exp('csv')">Export expenses (CSV)</button><button class="btn sm ghost" onclick="if(confirm('Erase everything?')){S=def();save();render()}">Reset data</button></div><input type="file" id="imp" accept=".json" hidden onchange="imp(this.files[0])"></div>`}};
+<div class="card" style="margin-top:12px"><h3 style="margin-bottom:8px">Your data</h3><div class="sub" style="margin-bottom:10px">Everything stays in this browser. Export a backup before clearing browser data or changing devices.</div><div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn sm" onclick="exp('json')">Export my data</button><button class="btn sm soft" onclick="$('#imp').click()">Import my data</button><button class="btn sm soft" onclick="exp('csv')">Export expenses (CSV)</button><button class="btn sm ghost" onclick="if(confirm('This will permanently erase your expenses, money-in entries, wishlist, purchases and settings from this browser. Export a backup first. Continue?')){S=def();save();render();toast('All local data was reset')}">Reset data</button></div><input type="file" id="imp" accept=".json" hidden onchange="imp(this.files[0])"></div>`}};
 function go(p){page=p;q='';$('#sq')&&($('#sq').value='');render();scrollTo(0,0)}
-function render(){$('#nav').innerHTML=[['home','🏠','Home'],['ex','💸','Expenses'],['wl','🛍','Wishlist'],['pu','🌸','Purchases'],['settings','⚙️','Settings']].map(n=>`<button class="${page==n[0]?'on':''}" onclick="go('${n[0]}')"><span>${n[1]}</span>${n[2]}</button>`).join('');
+function render(){$('#nav').innerHTML=[['home','🏠','Home'],['income','💰','Money In'],['ex','💸','Expenses'],['wl','🛍','Wishlist'],['pu','🌸','Purchases'],['settings','⚙️','Settings']].map(n=>`<button class="${page==n[0]?'on':''}" onclick="go('${n[0]}')"><span>${n[1]}</span>${n[2]}</button>`).join('');
 $('#app').innerHTML=`<input class="search" id="sq" placeholder="🔍 Search expenses, wishlist, purchases…" value="${esc(q)}" oninput="srch(this.value)"><div id="res"></div><div id="pg" ${q?'hidden':''}>${pages[page]()}</div>`;if(q)srch(q,1)}
 function srch(v,keep){q=v;const t=v.trim().toLowerCase(),r=$('#res');$('#pg').hidden=!!t;if(!t){r.innerHTML='';return}
-const m=x=>[x.t,x.c,x.n].join(' ').toLowerCase().includes(t);const a=S.ex.filter(m),b=S.wl.filter(m),c=S.pu.filter(m);
-r.innerHTML=(a.length?`<h3 style="margin:8px 0">Expenses</h3>${a.map(exItem).join('')}`:'')+(b.length?`<h3 style="margin:8px 0">Wishlist</h3><div class="grid g2">${b.map(wlCard).join('')}</div>`:'')+(c.length?`<h3 style="margin:14px 0 8px">Purchases</h3><div class="gal">${c.map(puCard).join('')}</div>`:'')||empty('Nothing found for “'+esc(v)+'”')}
+const m=x=>[x.t,x.c,x.n].join(' ').toLowerCase().includes(t);const z=(S.income||[]).filter(m),a=S.ex.filter(m),b=S.wl.filter(m),c=S.pu.filter(m);
+r.innerHTML=(z.length?`<h3 style="margin:8px 0">Money In</h3>${z.map(i=>`<div class="card item"><div class="ic">💰</div><div style="flex:1"><b>${esc(i.t||'Money received')}</b><div class="sub">${fd(i.d)}${i.n?' · '+esc(i.n):''}</div></div><div class="amt">+${fm(i.a)}</div></div>`).join('')}`:'')+(a.length?`<h3 style="margin:8px 0">Expenses</h3>${a.map(exItem).join('')}`:'')+(b.length?`<h3 style="margin:8px 0">Wishlist</h3><div class="grid g2">${b.map(wlCard).join('')}</div>`:'')+(c.length?`<h3 style="margin:14px 0 8px">Purchases</h3><div class="gal">${c.map(puCard).join('')}</div>`:'')||empty('Nothing found for “'+esc(v)+'”')}
 /* forms */
 const FD={ex:{n:'expense',f:[['a','Amount (DA)','number'],['d','Date','date'],['c','Category','sel','xc'],['t','Description','text'],['pm','Payment method','sel',['Cash','Card','Edahabia','Other']],['n','Note (optional)','area']]},
 wl:{n:'wishlist item',f:[['t','Item name','text'],['a','Estimated price (DA)','number'],['c','Category','sel','wc'],['p','Priority','sel',[[1,PR[1]],[2,PR[2]],[3,PR[3]]]],['s','Status','sel',['Want to Buy','Saving for it','Waiting for a sale']],['n','Notes','area'],['da','Date added','date'],['l','Link (optional)','url']]},
@@ -166,14 +167,15 @@ function doBuy(id){const w=S.wl.find(x=>x.id==id),a=+$('#bp').value||0,d=$('#bd'
 function ov(h){cl();const o=document.createElement('div');o.className='ov';o.id='ov';o.onclick=e=>{if(e.target==o)cl()};o.innerHTML=`<div class="sheet">${h}</div>`;document.body.appendChild(o)}
 function cl(){const o=$('#ov');o&&o.remove()}
 function addCat(k){const v=$('#nc').value.trim();if(!v)return;S[k].push(/^\p{Extended_Pictographic}/u.test(v)?v:'🌸 '+v);save();$('#nc').value='';toast('Category added')}
+function openIncome(){ov(`<div class="row sp"><h2>+ Add money 💰</h2><button class="btn sm ghost" onclick="cl()">✕</button></div><label>Amount (DA)<input id="ia" type="number" inputmode="decimal" step="any" placeholder="e.g. 10000"></label><label>Date<input id="id" type="date" value="${today()}"></label><label>Source / description<input id="it" type="text" placeholder="Allowance, gift, freelance..."></label><label>Note (optional)<textarea id="in" rows="2"></textarea></label><div class="row" style="margin-top:20px"><button class="btn" style="flex:1" onclick="saveIncome()">Add money</button><button class="btn ghost" onclick="cl()">Cancel</button></div>`)}function saveIncome(){const a=+$('#ia').value||0,d=$('#id').value||today(),t=$('#it').value.trim()||'Money received',n=$('#in').value.trim();if(a<=0){toast('Please add an amount');return}S.income.push({id:uid(),a,d,t,n});save();cl();render();toast('Money added 💰')}function delIncome(id){if(!confirm('Delete this money-in entry?'))return;S.income=S.income.filter(x=>x.id!=id);save();render();toast('Entry deleted')}
 /* data */
 function dl(name,text,type){try{const u=URL.createObjectURL(new Blob([text],{type:type}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);toast('File saved 🌸')}catch(e){toast('Could not save the file')}}
-function exp(k){if(k=='json')return dl('money-journal-'+today()+'.json',JSON.stringify(S),'application/json');
-const r=[['Date','Description','Category','Amount (DA)','Payment','Note']].concat(S.ex.map(e=>[e.d,e.t,e.c,e.a,e.pm,e.n]));dl('expenses-'+today()+'.csv','\ufeff'+r.map(x=>x.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n'),'text/csv')}
-function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.ex))throw 0;S=Object.assign(def(),d);save();render();toast('Data imported 🌸')}catch(e){toast('That file could not be read')}};r.readAsText(f)}
+function exp(k){if(k=='json')return dl('money-journal-backup-'+today()+'.json',JSON.stringify(S),'application/json');
+const r=[['Type','Date','Description','Category','Amount (DA)','Payment','Note']].concat((S.income||[]).map(e=>['Money In',e.d,e.t,'',e.a,'',e.n])).concat(S.ex.map(e=>['Expense',e.d,e.t,e.c,e.a,e.pm,e.n]));dl('expenses-'+today()+'.csv','\ufeff'+r.map(x=>x.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n'),'text/csv')}
+function imp(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.ex)||!Array.isArray(d.wl)||!Array.isArray(d.pu))throw 0;S=Object.assign(def(),d);if(!Array.isArray(S.income))S.income=[];save();render();toast('Data restored 🌸')}catch(e){toast('That file could not be read')}};r.readAsText(f)}
 /* quick add */
 $('#fab').onclick=()=>$('#menu').classList.toggle('open');
-$('#menu').innerHTML=[['ex','+ Expense'],['wl','+ Wishlist item'],['pu','+ Purchase']].map(a=>`<button class="btn soft" onclick="$('#menu').classList.remove('open');openForm('${a[0]}')">${a[1]}</button>`).join('');
+$('#menu').innerHTML=[['income','+ Money in'],['ex','+ Expense'],['wl','+ Wishlist item'],['pu','+ Purchase']].map(a=>`<button class="btn soft" onclick="$('#menu').classList.remove('open');openForm('${a[0]}')">${a[1]}</button>`).join('');
 render();
 </script>
 
@@ -195,4 +197,5 @@ render();
       });
   });
 }
+</script></body></html>
 </script></body></html>
