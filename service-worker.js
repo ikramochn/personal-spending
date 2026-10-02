@@ -5,16 +5,13 @@ const APP_FILES = [
   "./index.html",
   "./manifest.json",
 
-  // Icons
   "./icons/icon-192.png",
   "./icons/icon-512.png",
 
-  // DM Sans
   "./fonts/DMSans-Regular.woff2",
   "./fonts/DMSans-Medium.woff2",
   "./fonts/DMSans-SemiBold.woff2",
 
-  // Cormorant Garamond
   "./fonts/CormorantGaramond-Medium.woff2",
   "./fonts/CormorantGaramond-SemiBold.woff2",
   "./fonts/CormorantGaramond-Bold.woff2"
