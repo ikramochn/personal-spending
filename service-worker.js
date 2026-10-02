@@ -1,9 +1,23 @@
-const CACHE_NAME = "money-journal-v1";
+const CACHE_NAME = "money-journal-v2";
 
 const APP_FILES = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+
+  // Icons
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+
+  // DM Sans
+  "./fonts/DMSans-Regular.woff2",
+  "./fonts/DMSans-Medium.woff2",
+  "./fonts/DMSans-SemiBold.woff2",
+
+  // Cormorant Garamond
+  "./fonts/CormorantGaramond-Medium.woff2",
+  "./fonts/CormorantGaramond-SemiBold.woff2",
+  "./fonts/CormorantGaramond-Bold.woff2"
 ];
 
 self.addEventListener("install", event => {
@@ -30,7 +44,10 @@ self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(event.request)
-      .then(cached => cached || fetch(event.request))
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(event.request);
+    })
   );
 });
