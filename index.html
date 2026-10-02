@@ -2467,16 +2467,16 @@ else{
 
 function del(t,id){
 
-openDeleteModal(()=>{
+if(!confirm('Delete this?')){
+  return;
+}
 
-  S[t]=S[t].filter(x=>x.id!=id);
+S[t]=S[t].filter(x=>x.id!=id);
 
-  save();
-  cl();
-  render();
-
-  toast('Deleted 🌸');
-});
+save();
+cl();
+render();
+}
 /* =========================================================
    MOVE WISHLIST ITEM TO PURCHASE
    ========================================================= */
