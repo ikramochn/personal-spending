@@ -461,44 +461,28 @@ label{
 }
 
 /* Compact wishlist cards */
-
 .wl{
   overflow:hidden;
   padding:8px;
   border-radius:18px;
 }
 
-.wl .body{
-  padding:7px 3px 1px;
-}
-
-.wl .ph{
-  border-radius:14px;
-  aspect-ratio:4/3;
-}
-
-.wl h3{
-  font-size:18px;
-  line-height:1.15;
-}
-
-.wl .tag{
-  font-size:11px;
-  padding:3px 8px;
-}
-
-.wl .actions{
-  display:flex;
-  gap:6px;
-  margin-top:8px;
-}
-
-.wl .actions .btn{
+.wl .wl-info{
+  min-width:0;
   flex:1;
-  padding:6px 8px;
-  font-size:12px;
 }
 
+.wl .wl-title{
+  min-width:0;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+
+.wl .wl-price{
+  flex-shrink:0;
+  white-space:nowrap;
+}
+   
 .tag{
   display:inline-block;
   font-size:12px;
@@ -1017,10 +1001,12 @@ function wlCard(w){
 
       <div class="body">
 
-        <div class="row sp" style="align-items:flex-start">
-          <h3>${esc(w.t)}</h3>
-          <b class="amt">${fm(w.a)}</b>
-        </div>
+        <div class="row sp" style="align-items:flex-start;gap:8px">
+  <div class="wl-info">
+    <b class="wl-title">${esc(w.t)}</b>
+  </div>
+  <div class="amt wl-price">${fm(w.a)}</div>
+</div>
 
         <div style="margin-top:4px">
           <span class="tag">${PR[w.p]}</span>
