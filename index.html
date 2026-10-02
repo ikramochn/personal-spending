@@ -915,7 +915,8 @@ label{
 <nav id="nav"></nav>
 <div class="menu" id="menu"></div>
 <button class="fab" id="fab" aria-label="Quick add">+</button>
-
+   
+<script src="./supabase-config.js"></script>
 <script>
 const K='moneyJournalV1';
 const ACTIVATION_KEY='moneaActivationV1';
@@ -954,42 +955,84 @@ function hideActivation(){
   screen.classList.remove('show');
 
 }
-   async function activateMoneA(){
+async function activateMonea(){
 
-  const input=document.getElementById('accessCode');
-  const error=document.getElementById('activationError');
+  const input = document.getElementById('accessCode');
+  const error = document.getElementById('activationError');
 
-  const code=input.value
+  const code = input.value
     .trim()
     .toUpperCase();
 
-  error.textContent='';
+  error.textContent = '';
 
   if(!code){
 
-    error.textContent='Please enter your access code.';
+    error.textContent =
+      'Please enter your access code.';
 
     return;
   }
 
-  if(!VALID_CODES.includes(code)){
+  try{
 
-    error.textContent=
-      '❌ Invalid access code. Please check your code.';
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/rpc/activate_monea_code`,
+      {
+        method: 'POST',
 
-    return;
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          input_code: code
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    console.log('Supabase activation:', result);
+
+    if(!response.ok){
+
+      error.textContent =
+        'Something went wrong. Please try again.';
+
+      return;
+    }
+
+    if(!result.success){
+
+      error.textContent =
+        '❌ ' + (result.message || 'Invalid access code.');
+
+      return;
+    }
+
+    // Activation succeeded
+    localStorage.setItem(
+      ACTIVATION_KEY,
+      'activated'
+    );
+
+    hideActivation();
+
+    render();
+
+    toast('Activation successful 🌸');
+
+  }catch(err){
+
+    console.error('Activation error:', err);
+
+    error.textContent =
+      'Unable to connect. Please check your internet connection.';
+
   }
-
-  localStorage.setItem(
-    ACTIVATION_KEY,
-    'activated'
-  );
-
-  hideActivation();
-
-  render();
-
-  toast('Activation successful 🌸');
 
 }
 const $=s=>document.querySelector(s);
