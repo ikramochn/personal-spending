@@ -820,6 +820,80 @@ label{
 
 <script>
 const K='moneyJournalV1';
+const ACTIVATION_KEY='moneaActivationV1';
+
+const VALID_CODES = [
+  "NOVA-7K4P-92XM",
+  "NOVA-3F8L-21QA",
+  "NOVA-9X2M-74KD"
+];
+   function isActivated(){
+
+  return localStorage.getItem(ACTIVATION_KEY)==='activated';
+
+}
+
+function showActivation(){
+
+  const screen=document.getElementById('activationScreen');
+
+  if(!screen){
+    return;
+  }
+
+  screen.classList.add('show');
+
+}
+
+function hideActivation(){
+
+  const screen=document.getElementById('activationScreen');
+
+  if(!screen){
+    return;
+  }
+
+  screen.classList.remove('show');
+
+}
+   async function activateMoneA(){
+
+  const input=document.getElementById('accessCode');
+  const error=document.getElementById('activationError');
+
+  const code=input.value
+    .trim()
+    .toUpperCase();
+
+  error.textContent='';
+
+  if(!code){
+
+    error.textContent='Please enter your access code.';
+
+    return;
+  }
+
+  if(!VALID_CODES.includes(code)){
+
+    error.textContent=
+      '❌ Invalid access code. Please check your code.';
+
+    return;
+  }
+
+  localStorage.setItem(
+    ACTIVATION_KEY,
+    'activated'
+  );
+
+  hideActivation();
+
+  render();
+
+  toast('Activation successful 🌸');
+
+}
 const $=s=>document.querySelector(s);
 
 /* =========================================================
@@ -3025,9 +3099,25 @@ if("serviceWorker" in navigator){
 
 }
    setTimeout(()=>{
+
   const splash=document.getElementById('splash');
-  if(splash) splash.classList.add('hide');
+
+  if(splash){
+    splash.classList.add('hide');
+  }
+
+  if(isActivated()){
+
+    hideActivation();
+
+  }else{
+
+    showActivation();
+
+  }
+
 },1800);
+   
 </script>
 <div id="deleteModal" class="delete-modal" aria-hidden="true">
   <div class="delete-box">
