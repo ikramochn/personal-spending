@@ -1891,8 +1891,7 @@ function go(p){
 
   render();
   scrollTo(0,0);
-}
-let deleteAction = null;
+}let deleteAction = null;
 
 function openDeleteModal(action){
 
@@ -1925,6 +1924,7 @@ function closeDeleteModal(){
 function confirmDelete(){
 
   if(typeof deleteAction === 'function'){
+
     const action = deleteAction;
 
     closeDeleteModal();
@@ -1932,6 +1932,9 @@ function confirmDelete(){
     action();
   }
 }
+
+
+
 function render(){
 
   $('#nav').innerHTML=[
@@ -2467,15 +2470,18 @@ else{
 
 function del(t,id){
 
-if(!confirm('Delete this?')){
-  return;
-}
+  openDeleteModal(()=>{
 
-S[t]=S[t].filter(x=>x.id!=id);
+    S[t]=S[t].filter(x=>x.id!=id);
 
-save();
-cl();
-render();
+    save();
+    cl();
+    render();
+
+    toast('Deleted 🌸');
+
+  });
+
 }
 /* =========================================================
    MOVE WISHLIST ITEM TO PURCHASE
@@ -2779,19 +2785,19 @@ function saveIncome(){
    
 function delIncome(id){
 
-  if(!confirm('Delete this money-in entry?')){
-    return;
-  }
+  openDeleteModal(()=>{
 
-  S.income=
-    S.income.filter(x=>x.id!=id);
+    S.income=
+      S.income.filter(x=>x.id!=id);
 
-  save();
-  render();
+    save();
+    render();
 
-  toast('Entry deleted');
+    toast('Entry deleted');
+
+  });
+
 }
-
 /* =========================================================
    BACKUP / RESTORE
    ========================================================= */
@@ -3048,6 +3054,7 @@ if("serviceWorker" in navigator){
 
   </div>
 </div>
+   
 </body>
 </html>
 
