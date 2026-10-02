@@ -1,6 +1,6 @@
 {
-  "name": "My Little Money Journal",
-  "short_name": "Money Journal",
+  "name": "MONEA",
+  "short_name": "MONEA",
   "description": "A little personal journal for expenses, wishlist and purchases.",
   "start_url": "./",
   "scope": "./",
