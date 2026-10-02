@@ -856,25 +856,29 @@ const totalSpent=()=>sum(S.ex||[]);
 
 const balance=()=>{
 
-  const base = Number(S.balanceBase || 0);
-  const baseTime = Number(S.balanceBaseTime || 0);
+  const base=Number(S.balanceBase||0);
+  const baseTime=Number(S.balanceBaseTime||0);
+  const baseDate=S.balanceBaseDate||'';
 
   if(!baseTime){
     return totalIncome()-totalSpent();
   }
 
-  const incomeAfter = (S.income || [])
-    .filter(x => Number(x.createdAt || 0) > baseTime)
-    .reduce((sum,x) => sum + Number(x.a || 0), 0);
-
-  const expensesAfter = (S.ex || [])
-    .filter(x =>
-      Number(x.createdAt || 0) > baseTime &&
-      x.d >= today()
+  const incomeAfter=(S.income||[])
+    .filter(x=>
+      Number(x.createdAt||0)>baseTime &&
+      (!baseDate||x.d>=baseDate)
     )
-    .reduce((sum,x) => sum + Number(x.a || 0), 0);
+    .reduce((sum,x)=>sum+Number(x.a||0),0);
 
-  return base + incomeAfter - expensesAfter;
+  const expensesAfter=(S.ex||[])
+    .filter(x=>
+      Number(x.createdAt||0)>baseTime &&
+      (!baseDate||x.d>=baseDate)
+    )
+    .reduce((sum,x)=>sum+Number(x.a||0),0);
+
+  return base+incomeAfter-expensesAfter;
 };
 const fd=d=>
   d
@@ -2307,13 +2311,17 @@ function saveF(){
   o.img=img;
 
   if(id){
-    Object.assign(it,o);
-  }
-  else{
-    o.id=uid();
+  Object.assign(it,o);
+}
+else{
+  o.id=uid();
 
-    S[t].push(o);
+  if(t=='ex'){
+    o.createdAt=Date.now();
   }
+
+  S[t].push(o);
+}
 
   save();
   cl();
@@ -2433,17 +2441,19 @@ function doBuy(id){
 
   if($('#be').checked){
 
-S.ex.push({
-  id:uid(),
-  t:w.t,
-  a,
-  d,
-  createdAt:Date.now(),
-  c:S.xc.find(c=>/Shopping/.test(c))||S.xc[0],
-  pm:'Cash',
-  n:'',
-  img:''
-});
+    S.ex.push({
+      id:uid(),
+      t:w.t,
+      a,
+      d,
+      createdAt:Date.now(),
+      c:S.xc.find(c=>/Shopping/.test(c))||S.xc[0],
+      pm:'Cash',
+      n:'',
+      img:''
+    });
+
+  }
 
   S.wl=S.wl.filter(x=>x.id!=id);
 
@@ -2609,18 +2619,21 @@ function saveIncome(){
     return;
   }
 
-S.income.push({
-  id:uid(),
-  a,
-  d,
-  t,
-  n,
-  createdAt:Date.now()
-});
-   
-  // The latest "Add money" becomes the current balance baseline
- S.balanceBase = a;
- S.balanceBaseTime = Date.now();
+  const now=Date.now();
+
+  S.income.push({
+    id:uid(),
+    a,
+    d,
+    t,
+    n,
+    createdAt:now
+  });
+
+  // This amount becomes the new current balance baseline
+  S.balanceBase=a;
+  S.balanceBaseDate=d;
+  S.balanceBaseTime=now;
 
   save();
   cl();
