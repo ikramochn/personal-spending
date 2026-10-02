@@ -854,8 +854,28 @@ const totalIncome=()=>sum(S.income||[]);
 
 const totalSpent=()=>sum(S.ex||[]);
 
-const balance=()=>totalIncome()-totalSpent();
+const balance=()=>{
 
+  const base = Number(S.balanceBase || 0);
+  const baseTime = Number(S.balanceBaseTime || 0);
+
+  if(!baseTime){
+    return totalIncome()-totalSpent();
+  }
+
+  const incomeAfter = (S.income || [])
+    .filter(x => Number(x.createdAt || 0) > baseTime)
+    .reduce((sum,x) => sum + Number(x.a || 0), 0);
+
+  const expensesAfter = (S.ex || [])
+    .filter(x =>
+      Number(x.createdAt || 0) > baseTime &&
+      x.d >= today()
+    )
+    .reduce((sum,x) => sum + Number(x.a || 0), 0);
+
+  return base + incomeAfter - expensesAfter;
+};
 const fd=d=>
   d
   ?new Date(d+'T12:00').toLocaleDateString('en-GB',{
@@ -2413,18 +2433,17 @@ function doBuy(id){
 
   if($('#be').checked){
 
-    S.ex.push({
-      id:uid(),
-      t:w.t,
-      a,
-      d,
-      c:S.xc.find(c=>/Shopping/.test(c))||S.xc[0],
-      pm:'Cash',
-      n:'',
-      img:''
-    });
-
-  }
+S.ex.push({
+  id:uid(),
+  t:w.t,
+  a,
+  d,
+  createdAt:Date.now(),
+  c:S.xc.find(c=>/Shopping/.test(c))||S.xc[0],
+  pm:'Cash',
+  n:'',
+  img:''
+});
 
   S.wl=S.wl.filter(x=>x.id!=id);
 
@@ -2590,13 +2609,18 @@ function saveIncome(){
     return;
   }
 
-  S.income.push({
-    id:uid(),
-    a,
-    d,
-    t,
-    n
-  });
+S.income.push({
+  id:uid(),
+  a,
+  d,
+  t,
+  n,
+  createdAt:Date.now()
+});
+   
+  // The latest "Add money" becomes the current balance baseline
+ S.balanceBase = a;
+ S.balanceBaseTime = Date.now();
 
   save();
   cl();
@@ -2604,7 +2628,7 @@ function saveIncome(){
 
   toast('Money added 💰');
 }
-
+   
 function delIncome(id){
 
   if(!confirm('Delete this money-in entry?')){
