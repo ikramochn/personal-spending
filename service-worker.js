@@ -1,4 +1,4 @@
-const CACHE_NAME = "money-journal-v2";
+const CACHE_NAME = "money-journal-v3";
 
 const APP_FILES = [
   "./",
