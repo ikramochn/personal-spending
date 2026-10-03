@@ -1,1 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>MONEA Admin</title>
+
+  <style>
+    :root{
+      --bg:#faf5ee;
+      --card:#fffdf9;
+      --ink:#3d2a2f;
+      --mute:#8a7670;
+      --rose:#c98d97;
+      --blush:#f5e3e3;
+      --berry:#7a2e4a;
+      --line:#ead9d0;
+      --green:#587b68;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:Arial,sans-serif;
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    .wrap{
+      width:min(920px,100%);
+      margin:auto;
+      padding:32px 18px 50px;
+    }
+
+    /* LOGIN */
+
+    #loginScreen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .login-box{
+      width:min(400px,100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:32px 24px;
+      box-shadow:0 12px 40px rgba(61,42,47,.08);
+    }
+
+    .brand{
+      text-align:center;
+      margin-bottom:28px;
+    }
+
+    .brand h1{
+      margin:0;
+      font-family:Georgia,serif;
+      font-size:42px;
+      color:var(--berry);
+    }
+
+    .brand p{
+      margin:7px 0 0;
+      color:var(--mute);
+      font-size:14px;
+    }
+
+    .field{
+      margin-bottom:16px;
+    }
+
+    .field label{
+      display:block;
+      margin-bottom:7px;
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    .field input{
+      width:100%;
+      padding:13px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:white;
+      color:var(--ink);
+      outline:none;
+    }
+
+    .field input:focus{
+      border-color:var(--rose);
+    }
+
+    .btn{
+      width:100%;
+      border:0;
+      border-radius:13px;
+      padding:13px 16px;
+      background:var(--berry);
+      color:white;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .btn:hover{
+      opacity:.92;
+    }
+
+    .error{
+      min-height:20px;
+      margin:10px 0 14px;
+      color:#a33b4b;
+      font-size:13px;
+      text-align:center;
+    }
+
+    /* ADMIN */
+
+    #adminScreen{
+      display:none;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:26px;
+    }
+
+    .top h1{
+      margin:0;
+      font-family:Georgia,serif;
+      font-size:34px;
+    }
+
+    .logout{
+      width:auto;
+      background:transparent;
+      color:var(--berry);
+      border:1px solid var(--line);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-bottom:24px;
+    }
+
+    .stat{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+    }
+
+    .stat-label{
+      color:var(--mute);
+      font-size:13px;
+      margin-bottom:8px;
+    }
+
+    .stat-value{
+      font-family:Georgia,serif;
+      font-size:32px;
+      color:var(--berry);
+    }
+
+    .section{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      margin-bottom:20px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:15px;
+    }
+
+    .section h2{
+      margin:0;
+      font-family:Georgia,serif;
+      font-size:25px;
+    }
+
+    .refresh{
+      width:auto;
+      padding:9px 13px;
+      background:var(--blush);
+      color:var(--berry);
+    }
+
+    .code-list{
+      display:flex;
+      flex-direction:column;
+      gap:9px;
+    }
+
+    .code-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 13px;
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:#fff;
+    }
+
+    .code{
+      font-family:monospace;
+      font-weight:bold;
+      letter-spacing:.5px;
+      word-break:break-all;
+    }
+
+    .row-right{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      flex-shrink:0;
+    }
+
+    .badge{
+      padding:5px 9px;
+      border-radius:20px;
+      font-size:11px;
+      font-weight:bold;
+    }
+
+    .available{
+      background:#e8f1eb;
+      color:var(--green);
+    }
+
+    .used{
+      background:var(--blush);
+      color:var(--berry);
+    }
+
+    .copy{
+      width:auto;
+      padding:7px 10px;
+      background:var(--beige);
+      color:var(--ink);
+      font-size:12px;
+    }
+
+    .empty{
+      padding:20px 5px;
+      text-align:center;
+      color:var(--mute);
+      font-size:14px;
+    }
+
+    .activated{
+      color:var(--mute);
+      font-size:11px;
+      margin-top:4px;
+    }
+
+    .status{
+      min-height:20px;
+      margin-bottom:15px;
+      color:var(--mute);
+      font-size:13px;
+    }
+
+    @media(max-width:650px){
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .top{
+        align-items:flex-start;
+      }
+
+      .top h1{
+        font-size:29px;
+      }
+
+      .code-row{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .row-right{
+        width:100%;
+        justify-content:space-between;
+      }
+
+      .copy{
+        margin-left:auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+
+  <section id="loginScreen">
+
+    <div class="login-box">
+
+      <div class="brand">
+        <h1>MONEA</h1>
+        <p>Admin Code Manager</p>
+      </div>
+
+      <form id="loginForm">
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <div
+          id="loginError"
+          class="error">
+        </div>
+
+        <button
+          class="btn"
+          type="submit">
+          Sign in
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- ADMIN -->
+
+  <main id="adminScreen">
+
+    <div class="wrap">
+
+      <div class="top">
+
+        <div>
+          <h1>MONEA Admin</h1>
+          <div class="status" id="status">
+            Loading...
+          </div>
+        </div>
+
+        <button
+          class="btn logout"
+          id="logoutBtn"
+          type="button">
+          Log out
+        </button>
+
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">
+            Total codes
+          </div>
+
+          <div
+            class="stat-value"
+            id="totalCount">
+            0
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            Available
+          </div>
+
+          <div
+            class="stat-value"
+            id="availableCount">
+            0
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            Used
+          </div>
+
+          <div
+            class="stat-value"
+            id="usedCount">
+            0
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- AVAILABLE -->
+
+      <section class="section">
+
+        <div class="section-head">
+
+          <h2>Available Codes</h2>
+
+          <button
+            class="btn refresh"
+            id="refreshBtn"
+            type="button">
+            Refresh
+          </button>
+
+        </div>
+
+        <div
+          class="code-list"
+          id="availableList">
+        </div>
+
+      </section>
+
+
+      <!-- USED -->
+
+      <section class="section">
+
+        <div class="section-head">
+
+          <h2>Used Codes</h2>
+
+        </div>
+
+        <div
+          class="code-list"
+          id="usedList">
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+<script>
+
+const SUPABASE_URL =
+  "https://dzldnfkxghgmkciutaqi.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_himkmn7CnCz0fjq1Nrg1cA_Dr2yycXK";
+
+
+const loginScreen =
+  document.getElementById('loginScreen');
+
+const adminScreen =
+  document.getElementById('adminScreen');
+
+const loginForm =
+  document.getElementById('loginForm');
+
+const loginError =
+  document.getElementById('loginError');
+
+const statusEl =
+  document.getElementById('status');
+
+const availableList =
+  document.getElementById('availableList');
+
+const usedList =
+  document.getElementById('usedList');
+
+
+let accessToken = null;
+let codes = [];
+
+
+/* LOGIN */
+
+loginForm.addEventListener('submit', async e => {
+
+  e.preventDefault();
+
+  loginError.textContent = '';
+
+  const email =
+    document.getElementById('email').value.trim();
+
+  const password =
+    document.getElementById('password').value;
+
+
+  try{
+
+    const response = await fetch(
+      `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+      {
+        method:'POST',
+
+        headers:{
+          'apikey':SUPABASE_KEY,
+          'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+          email,
+          password
+        })
+      }
+    );
+
+
+    const result =
+      await response.json();
+
+
+    if(!response.ok){
+
+      loginError.textContent =
+        result.error_description ||
+        result.msg ||
+        'Invalid email or password.';
+
+      return;
+    }
+
+
+    accessToken =
+      result.access_token;
+
+
+    sessionStorage.setItem(
+      'moneaAdminToken',
+      accessToken
+    );
+
+
+    showAdmin();
+
+  }catch(err){
+
+    console.error(err);
+
+    loginError.textContent =
+      'Unable to connect to Supabase.';
+
+  }
+
+});
+
+
+/* SHOW ADMIN */
+
+function showAdmin(){
+
+  loginScreen.style.display='none';
+
+  adminScreen.style.display='block';
+
+  loadCodes();
+
+}
+
+
+/* LOAD CODES */
+
+async function loadCodes(){
+
+  statusEl.textContent =
+    'Loading codes...';
+
+
+  try{
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/rpc/get_monea_codes`,
+      {
+        method:'POST',
+
+        headers:{
+          'apikey':SUPABASE_KEY,
+          'Authorization':`Bearer ${accessToken}`,
+          'Content-Type':'application/json'
+        },
+
+        body:'{}'
+      }
+    );
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      'Admin codes:',
+      result
+    );
+
+
+    if(!response.ok){
+
+      statusEl.textContent =
+        'Unable to load codes.';
+
+      console.error(result);
+
+      return;
+    }
+
+
+    codes =
+      Array.isArray(result)
+        ? result
+        : [];
+
+
+    renderCodes();
+
+
+    statusEl.textContent =
+      `${codes.length} code${codes.length===1?'':'s'} total`;
+
+  }catch(err){
+
+    console.error(err);
+
+    statusEl.textContent =
+      'Connection error.';
+
+  }
+
+}
+
+
+/* RENDER */
+
+function renderCodes(){
+
+  const available =
+    codes.filter(x =>
+      x.status === 'available'
+    );
+
+  const used =
+    codes.filter(x =>
+      x.status !== 'available'
+    );
+
+
+  document.getElementById('totalCount')
+    .textContent =
+    codes.length;
+
+  document.getElementById('availableCount')
+    .textContent =
+    available.length;
+
+  document.getElementById('usedCount')
+    .textContent =
+    used.length;
+
+
+  availableList.innerHTML =
+    available.length
+      ? available.map(codeRow).join('')
+      : `<div class="empty">No available codes.</div>`;
+
+
+  usedList.innerHTML =
+    used.length
+      ? used.map(codeRow).join('')
+      : `<div class="empty">No used codes yet.</div>`;
+
+}
+
+
+/* CODE ROW */
+
+function codeRow(item){
+
+  const isAvailable =
+    item.status === 'available';
+
+
+  const activated =
+    item.activated_at
+      ? new Date(item.activated_at)
+          .toLocaleString()
+      : '';
+
+
+  return `
+
+    <div class="code-row">
+
+      <div>
+
+        <div class="code">
+          ${escapeHtml(item.code)}
+        </div>
+
+        ${
+          activated
+            ? `<div class="activated">
+                 Activated: ${escapeHtml(activated)}
+               </div>`
+            : ''
+        }
+
+      </div>
+
+
+      <div class="row-right">
+
+        <span class="badge ${
+          isAvailable
+            ? 'available'
+            : 'used'
+        }">
+          ${
+            isAvailable
+              ? 'Available'
+              : 'Used'
+          }
+        </span>
+
+
+        <button
+          class="btn copy"
+          type="button"
+          data-code="${escapeHtml(item.code)}">
+          Copy
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* COPY */
+
+document.addEventListener('click', async e => {
+
+  const btn =
+    e.target.closest('.copy');
+
+  if(!btn){
+    return;
+  }
+
+  const code =
+    btn.dataset.code;
+
+
+  try{
+
+    await navigator.clipboard.writeText(code);
+
+    const old =
+      btn.textContent;
+
+    btn.textContent =
+      'Copied ✓';
+
+
+    setTimeout(() => {
+
+      btn.textContent =
+        old;
+
+    },1200);
+
+  }catch(err){
+
+    alert(
+      'Copy failed. Please copy the code manually.'
+    );
+
+  }
+
+});
+
+
+/* REFRESH */
+
+document
+  .getElementById('refreshBtn')
+  .addEventListener(
+    'click',
+    loadCodes
+  );
+
+
+/* LOGOUT */
+
+document
+  .getElementById('logoutBtn')
+  .addEventListener(
+    'click',
+    () => {
+
+      accessToken = null;
+
+      sessionStorage.removeItem(
+        'moneaAdminToken'
+      );
+
+      adminScreen.style.display='none';
+
+      loginScreen.style.display='flex';
+
+      loginForm.reset();
+
+      loginError.textContent='';
+
+    }
+  );
+
+
+/* ESCAPE HTML */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* RESTORE SESSION */
+
+const savedToken =
+  sessionStorage.getItem(
+    'moneaAdminToken'
+  );
+
+
+if(savedToken){
+
+  accessToken =
+    savedToken;
+
+  showAdmin();
+
+}
+
+</script>
+
+</body>
+</html>
