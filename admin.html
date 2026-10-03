@@ -733,19 +733,23 @@ loginForm.addEventListener('submit', async e => {
       await response.json();
 
 
- if(!response.ok){
+if(!response.ok){
 
-  console.error('GENERATE ERROR:', result);
+  console.error('GENERATE ERROR:', response.status, result);
 
-  showToast(
+  const errorMessage =
     result.message ||
     result.error ||
     result.hint ||
-    'Unable to generate codes.'
-  );
+    result.details ||
+    'Unknown error';
 
   statusEl.textContent =
-    'Generation failed.';
+    `Error ${response.status}: ${errorMessage}`;
+
+  showToast(
+    `Error ${response.status}`
+  );
 
   return;
 }
