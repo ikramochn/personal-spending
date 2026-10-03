@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -17,6 +18,7 @@
       --berry:#7a2e4a;
       --line:#ead9d0;
       --green:#587b68;
+      --beige:#efe4d6;
     }
 
     *{
@@ -31,7 +33,8 @@
     }
 
     button,
-    input{
+    input,
+    select{
       font:inherit;
     }
 
@@ -104,10 +107,9 @@
     }
 
     .btn{
-      width:100%;
       border:0;
       border-radius:13px;
-      padding:13px 16px;
+      padding:11px 15px;
       background:var(--berry);
       color:white;
       cursor:pointer;
@@ -116,6 +118,11 @@
 
     .btn:hover{
       opacity:.92;
+    }
+
+    .login-btn{
+      width:100%;
+      padding:13px 16px;
     }
 
     .error{
@@ -193,6 +200,7 @@
       justify-content:space-between;
       gap:12px;
       margin-bottom:15px;
+      flex-wrap:wrap;
     }
 
     .section h2{
@@ -201,11 +209,58 @@
       font-size:25px;
     }
 
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
     .refresh{
       width:auto;
-      padding:9px 13px;
       background:var(--blush);
       color:var(--berry);
+    }
+
+    .generate{
+      background:var(--berry);
+      color:white;
+    }
+
+    .secondary{
+      background:var(--beige);
+      color:var(--ink);
+    }
+
+    .generate-box{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:16px;
+      padding:13px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+
+    .generate-box label{
+      color:var(--mute);
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .generate-box select{
+      min-width:90px;
+      padding:9px 10px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:white;
+      color:var(--ink);
+      outline:none;
+    }
+
+    .generate-box select:focus{
+      border-color:var(--rose);
     }
 
     .code-list{
@@ -279,9 +334,30 @@
 
     .status{
       min-height:20px;
-      margin-bottom:15px;
+      margin-top:5px;
       color:var(--mute);
       font-size:13px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%) translateY(15px);
+      background:var(--berry);
+      color:white;
+      padding:11px 16px;
+      border-radius:12px;
+      font-size:13px;
+      opacity:0;
+      pointer-events:none;
+      transition:.2s ease;
+      z-index:9999;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
     }
 
     @media(max-width:650px){
@@ -296,6 +372,28 @@
 
       .top h1{
         font-size:29px;
+      }
+
+      .section-head{
+        align-items:flex-start;
+      }
+
+      .actions{
+        width:100%;
+      }
+
+      .actions button{
+        flex:1;
+      }
+
+      .generate-box{
+        align-items:stretch;
+        flex-direction:column;
+      }
+
+      .generate-box select,
+      .generate-box button{
+        width:100%;
       }
 
       .code-row{
@@ -313,6 +411,7 @@
       }
     }
   </style>
+
 </head>
 
 <body>
@@ -321,167 +420,232 @@
 
   <section id="loginScreen">
 
-    <div class="login-box">
+```
+<div class="login-box">
 
-      <div class="brand">
-        <h1>MONEA</h1>
-        <p>Admin Code Manager</p>
-      </div>
+  <div class="brand">
+    <h1>MONEA</h1>
+    <p>Admin Code Manager</p>
+  </div>
 
-      <form id="loginForm">
+  <form id="loginForm">
 
-        <div class="field">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            autocomplete="username"
-            required
-          >
-        </div>
+    <div class="field">
+      <label for="email">Email</label>
 
-        <div class="field">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            required
-          >
-        </div>
-
-        <div
-          id="loginError"
-          class="error">
-        </div>
-
-        <button
-          class="btn"
-          type="submit">
-          Sign in
-        </button>
-
-      </form>
-
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        required
+      >
     </div>
 
-  </section>
+    <div class="field">
+      <label for="password">Password</label>
 
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+    </div>
+
+    <div
+      id="loginError"
+      class="error">
+    </div>
+
+    <button
+      class="btn login-btn"
+      type="submit">
+      Sign in
+    </button>
+
+  </form>
+
+</div>
+```
+
+  </section>
 
   <!-- ADMIN -->
 
   <main id="adminScreen">
 
-    <div class="wrap">
+```
+<div class="wrap">
 
-      <div class="top">
+  <div class="top">
 
-        <div>
-          <h1>MONEA Admin</h1>
-          <div class="status" id="status">
-            Loading...
-          </div>
-        </div>
+    <div>
+      <h1>MONEA Admin</h1>
+
+      <div
+        class="status"
+        id="status">
+        Loading...
+      </div>
+    </div>
+
+    <button
+      class="btn logout"
+      id="logoutBtn"
+      type="button">
+      Log out
+    </button>
+
+  </div>
+
+
+  <!-- STATS -->
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">
+        Total codes
+      </div>
+
+      <div
+        class="stat-value"
+        id="totalCount">
+        0
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">
+        Available
+      </div>
+
+      <div
+        class="stat-value"
+        id="availableCount">
+        0
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">
+        Used
+      </div>
+
+      <div
+        class="stat-value"
+        id="usedCount">
+        0
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- AVAILABLE -->
+
+  <section class="section">
+
+    <div class="section-head">
+
+      <h2>Available Codes</h2>
+
+      <div class="actions">
 
         <button
-          class="btn logout"
-          id="logoutBtn"
+          class="btn secondary"
+          id="copyAvailableBtn"
           type="button">
-          Log out
+          Copy Available
+        </button>
+
+        <button
+          class="btn secondary"
+          id="exportBtn"
+          type="button">
+          Export CSV
+        </button>
+
+        <button
+          class="btn refresh"
+          id="refreshBtn"
+          type="button">
+          Refresh
         </button>
 
       </div>
 
-
-      <!-- STATS -->
-
-      <div class="stats">
-
-        <div class="stat">
-          <div class="stat-label">
-            Total codes
-          </div>
-
-          <div
-            class="stat-value"
-            id="totalCount">
-            0
-          </div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">
-            Available
-          </div>
-
-          <div
-            class="stat-value"
-            id="availableCount">
-            0
-          </div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">
-            Used
-          </div>
-
-          <div
-            class="stat-value"
-            id="usedCount">
-            0
-          </div>
-        </div>
-
-      </div>
+    </div>
 
 
-      <!-- AVAILABLE -->
+    <!-- GENERATE -->
 
-      <section class="section">
+    <div class="generate-box">
 
-        <div class="section-head">
+      <label for="generateAmount">
+        Generate new codes:
+      </label>
 
-          <h2>Available Codes</h2>
+      <select id="generateAmount">
 
-          <button
-            class="btn refresh"
-            id="refreshBtn"
-            type="button">
-            Refresh
-          </button>
+        <option value="10">
+          10 codes
+        </option>
 
-        </div>
+        <option value="50">
+          50 codes
+        </option>
 
-        <div
-          class="code-list"
-          id="availableList">
-        </div>
+        <option value="100">
+          100 codes
+        </option>
 
-      </section>
+      </select>
 
-
-      <!-- USED -->
-
-      <section class="section">
-
-        <div class="section-head">
-
-          <h2>Used Codes</h2>
-
-        </div>
-
-        <div
-          class="code-list"
-          id="usedList">
-        </div>
-
-      </section>
+      <button
+        class="btn generate"
+        id="generateBtn"
+        type="button">
+        + Generate
+      </button>
 
     </div>
 
+
+    <div
+      class="code-list"
+      id="availableList">
+    </div>
+
+  </section>
+
+
+  <!-- USED -->
+
+  <section class="section">
+
+    <div class="section-head">
+
+      <h2>Used Codes</h2>
+
+    </div>
+
+    <div
+      class="code-list"
+      id="usedList">
+    </div>
+
+  </section>
+
+</div>
+```
+
   </main>
 
+  <div
+    class="toast"
+    id="toast">
+  </div>
 
 <script>
 
@@ -512,6 +676,18 @@ const availableList =
 
 const usedList =
   document.getElementById('usedList');
+
+const generateBtn =
+  document.getElementById('generateBtn');
+
+const generateAmount =
+  document.getElementById('generateAmount');
+
+const copyAvailableBtn =
+  document.getElementById('copyAvailableBtn');
+
+const exportBtn =
+  document.getElementById('exportBtn');
 
 
 let accessToken = null;
@@ -676,6 +852,119 @@ async function loadCodes(){
 }
 
 
+/* GENERATE CODES */
+
+generateBtn.addEventListener(
+  'click',
+  generateCodes
+);
+
+
+async function generateCodes(){
+
+  const amount =
+    Number(generateAmount.value);
+
+
+  if(
+    !Number.isInteger(amount) ||
+    amount < 1 ||
+    amount > 500
+  ){
+
+    showToast('Invalid number of codes.');
+
+    return;
+  }
+
+
+  const oldText =
+    generateBtn.textContent;
+
+
+  generateBtn.disabled = true;
+
+  generateBtn.textContent =
+    'Generating...';
+
+  statusEl.textContent =
+    `Generating ${amount} codes...`;
+
+
+  try{
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/rpc/generate_monea_codes`,
+      {
+        method:'POST',
+
+        headers:{
+          'apikey':SUPABASE_KEY,
+          'Authorization':`Bearer ${accessToken}`,
+          'Content-Type':'application/json'
+        },
+
+        body:JSON.stringify({
+          amount
+        })
+      }
+    );
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      'Generated codes:',
+      result
+    );
+
+
+    if(!response.ok){
+
+      console.error(result);
+
+      showToast(
+        'Unable to generate codes.'
+      );
+
+      statusEl.textContent =
+        'Generation failed.';
+
+      return;
+    }
+
+
+    await loadCodes();
+
+    showToast(
+      `${amount} new code${amount===1?'':'s'} generated ✓`
+    );
+
+  }catch(err){
+
+    console.error(err);
+
+    showToast(
+      'Connection error.'
+    );
+
+    statusEl.textContent =
+      'Generation failed.';
+
+  }finally{
+
+    generateBtn.disabled = false;
+
+    generateBtn.textContent =
+      oldText;
+
+  }
+
+}
+
+
 /* RENDER */
 
 function renderCodes(){
@@ -785,7 +1074,7 @@ function codeRow(item){
 }
 
 
-/* COPY */
+/* COPY SINGLE CODE */
 
 document.addEventListener('click', async e => {
 
@@ -829,6 +1118,151 @@ document.addEventListener('click', async e => {
 });
 
 
+/* COPY AVAILABLE CODES */
+
+copyAvailableBtn.addEventListener(
+  'click',
+  async () => {
+
+    const available =
+      codes
+        .filter(x =>
+          x.status === 'available'
+        )
+        .map(x => x.code);
+
+
+    if(!available.length){
+
+      showToast(
+        'No available codes.'
+      );
+
+      return;
+    }
+
+
+    try{
+
+      await navigator.clipboard.writeText(
+        available.join('\n')
+      );
+
+
+      showToast(
+        `${available.length} available codes copied ✓`
+      );
+
+    }catch(err){
+
+      alert(
+        'Copy failed. Please try again.'
+      );
+
+    }
+
+  }
+);
+
+
+/* EXPORT CSV */
+
+exportBtn.addEventListener(
+  'click',
+  exportCSV
+);
+
+
+function exportCSV(){
+
+  if(!codes.length){
+
+    showToast(
+      'No codes to export.'
+    );
+
+    return;
+  }
+
+
+  const header =
+    'Code,Status,Activated At';
+
+
+  const rows =
+    codes.map(item => {
+
+      const code =
+        csvEscape(item.code);
+
+      const status =
+        csvEscape(item.status);
+
+      const activated =
+        item.activated_at
+          ? csvEscape(
+              new Date(
+                item.activated_at
+              ).toLocaleString()
+            )
+          : '';
+
+      return `${code},${status},${activated}`;
+
+    });
+
+
+  const csv =
+    [header,...rows].join('\n');
+
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:'text/csv;charset=utf-8;'
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement('a');
+
+  a.href = url;
+
+  a.download =
+    `monea-codes-${new Date()
+      .toISOString()
+      .slice(0,10)}.csv`;
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+
+  showToast(
+    'CSV exported ✓'
+  );
+
+}
+
+
+function csvEscape(value){
+
+  return `"${String(value ?? '')
+    .replaceAll('"','""')}"`;
+
+}
+
+
 /* REFRESH */
 
 document
@@ -863,6 +1297,34 @@ document
 
     }
   );
+
+
+/* TOAST */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById('toast');
+
+  toast.textContent =
+    message;
+
+  toast.classList.add('show');
+
+
+  clearTimeout(
+    showToast.timer
+  );
+
+
+  showToast.timer =
+    setTimeout(() => {
+
+      toast.classList.remove('show');
+
+    },2200);
+
+}
 
 
 /* ESCAPE HTML */
