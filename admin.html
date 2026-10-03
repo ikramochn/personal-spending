@@ -733,15 +733,22 @@ loginForm.addEventListener('submit', async e => {
       await response.json();
 
 
-    if(!response.ok){
+ if(!response.ok){
 
-      loginError.textContent =
-        result.error_description ||
-        result.msg ||
-        'Invalid email or password.';
+  console.error('GENERATE ERROR:', result);
 
-      return;
-    }
+  showToast(
+    result.message ||
+    result.error ||
+    result.hint ||
+    'Unable to generate codes.'
+  );
+
+  statusEl.textContent =
+    'Generation failed.';
+
+  return;
+}
 
 
     accessToken =
